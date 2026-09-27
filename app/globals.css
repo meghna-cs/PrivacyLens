@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #EFEDE2;
+  background-image:
+    linear-gradient(rgba(27, 36, 48, 0.028) 1px, transparent 1px);
+  background-size: 100% 32px;
+  color: #1B2430;
+}
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid currentColor;
+  padding: 0.1rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  letter-spacing: 0.02em;
+}
+
+.hairline {
+  border-color: #C9C2A6;
+}
+
+.folder-tab {
+  position: relative;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.folder-tab[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: #3F6E64;
+}
+
+textarea:focus, input:focus, button:focus-visible {
+  outline: 2px solid #3F6E64;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #3F6E64;
+  color: #EFEDE2;
+}
