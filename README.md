@@ -1,167 +1,296 @@
-## Build at 
-- LexHack 2026 Hackathon
-## Build by
-- Arghyadeep Bag (@arghya29)
-- Meghna Dutta (@meghna-cs)
-
 # PrivacyLens
 
-"Know what they know. Know your options."
+> Know what they know. Know your options.
 
-Paste a privacy policy (or point PrivacyLens at a URL), and it produces a
-plain-language dossier: what data is collected and why, who it's shared
-with, how long it's kept, what's left unclear, and — the differentiating
-part — what rights you have and a ready-to-edit draft request you can send.
+PrivacyLens turns long, complicated privacy policies into a clear, actionable dossier that helps users understand what data is being collected, why it is collected, who it is shared with, how long it is retained, what remains unclear, and what rights or next steps are available.
 
-This was scoped from a hackathon research memo (see the reasoning behind
-what's built vs. skipped below). It deliberately does **not** try to be a
-privacy-policy summarizer, a policy comparison tool, or a tracker scanner —
-those spaces are already well covered by ToS;DR, ProPolisis, the Harvard
-Transparency Hub, and Blacklight/εxodus respectively. It focuses on turning
-a policy into something actionable for the person reading it.
+## Links
 
-## What's built
+- 🌐 Live Demo: https://privacy-lens-bb.vercel.app/
+- 🎥 Demo Video: https://www.youtube.com/watch?v=MISWJ01PudU
+- 🏆 Devpost: https://devpost.com/software/privacylens-biqy56
 
-0. **A continuous, navigable dossier** — all five sections render on one
-   scrollable page with a sticky section nav (vertical sidebar on desktop,
-   horizontal scroll bar on mobile) that highlights the section you're in
-   and jumps on click. A "Privacy at a glance" summary and a set of
-   clickable headline stats sit at the top, both of which scroll you
-   straight to the relevant section — along with the category chips, which
-   now do the same. A small "+ New search" and a "Methodology" link live in
-   a persistent site header, and a "↑ Top" button appears once you've
-   scrolled.
-1. **What & why** — data categories the policy mentions (always including
-   Financial information and Children's data, explicitly marked "not
-   identified" when the policy is silent on them), the stated purpose for
-   each, a plain-language "why this matters" note, and a rule-based
-   **review priority** (high / medium / low / unclear) — deliberately not
-   called "attention," since that read as a risk judgment of the company.
-   A compact "data → purpose" table sits at the end of the section.
-2. **Who gets it** — a flow diagram whose recipient boxes are clickable and
-   jump to the matching detail card, a breakdown of what data each
-   recipient may receive and why, and a "data → recipient" table.
-3. **How long** — retention split into a general principle and any
-   category-specific periods the policy actually gives, so "specific"
-   classification doesn't imply every category has a specific period.
-4. **What's unclear** — a fixed seven-category clarity audit with an
-   explicit "what 'clear' means" explainer (it describes the text, not the
-   practice), plus structured open-question cards (title, question, why
-   it's open, and a priority reflecting how useful it'd be to resolve —
-   not a judgment of the company). The top open question is surfaced right
-   below the header, before you have to scroll for it.
-5. **Your rights & action**, split into two clearly separate things:
-   - what *this company's policy itself* describes, each tagged with
-     whether it's global or region-specific, and
-   - a general jurisdiction reference (India's DPDP Act 2023 / 2025
-     Rules), shown independently.
-   The request generator groups its dropdown into "Based on {company}'s
-   policy" vs. "Based on jurisdiction," auto-suggests including an open
-   question the analysis flagged when relevant (e.g. asking about backups
-   on a deletion request), and produces an **editable** draft with copy,
-   regenerate, and start-over controls, followed by a short "what happens
-   next" checklist.
-6. **Evidence, everywhere** — every finding separates "PrivacyLens
-   analysis" from "Policy evidence," with its own confidence level
-   (high/medium/low) and a dedicated methodology explainer, kept visually
-   and conceptually distinct from review priority.
-7. **A methodology page** (`/methodology`) — what PrivacyLens analyzes,
-   what it doesn't do, how an analysis runs, and the review-priority and
-   confidence criteria spelled out in full.
-8. **Explain this to me** — click any category to get a short, plain-English
-   explanation via Gemini, scoped strictly to what was actually found.
-9. **Personalization** — pick what you care about and the dossier reorders
-   and jumps to the relevant section.
+Built at LexHack 2026.
 
-### Deliberately left out (see the research memo)
+## What is PrivacyLens?
 
-- An overall privacy score or a "good/bad" verdict — too subjective to
-  defend.
-- Policy-vs-observed-behavior scanning (à la Blacklight) — needs real
-  browser-based tracker detection infrastructure, not just an LLM call;
-  intentionally deferred until the analysis/evidence/rights layer above is
-  solid, per the v2 review.
-- Cross-policy comparison and historical policy-change tracking — Harvard's
-  Transparency Hub already does this at scale.
-- A full multi-jurisdiction rights picker (EU/US/etc.) — only India's DPDP
-  is implemented for now; the UI is structured so more can be added later
-  without touching the policy-analysis side.
+Privacy policies are often long, technical, and difficult to interpret. PrivacyLens transforms a policy into a structured, plain-language dossier that helps users answer:
 
-## Stack
+- What data is collected?
+- Why is it collected?
+- Who gets it?
+- How long is it kept?
+- What remains unclear?
+- What rights and options are described?
+- What action can I take?
 
-- Next.js 14 (App Router) + TypeScript + Tailwind CSS
-- Google Gemini API for analysis, plain-language explanations, and draft
-  request generation — called only from server-side API routes, so your
-  API key is never exposed to the browser
-- No database — everything is generated per request; nothing is stored
+Users can paste a privacy policy directly or provide a URL for analysis.
 
-## Local setup
+Instead of giving an overall "privacy score," PrivacyLens focuses on making privacy information understandable, evidence-based, and actionable.
+
+## Features
+
+### 1. What & Why
+
+PrivacyLens identifies the data categories mentioned in a policy and explains:
+
+- What data is collected
+- The stated purpose of collection
+- Why the information may matter to the user
+- A review priority: high, medium, low, or unclear
+
+It also includes a compact data-to-purpose table for quick reference.
+
+### 2. Who Gets It
+
+PrivacyLens maps potential data recipients through an interactive flow. Recipients are clickable and navigate directly to the relevant details.
+
+Each section explains:
+
+- Who receives the data
+- What types of data may be involved
+- Why the data may be shared
+- Supporting policy evidence
+
+### 3. How Long
+
+Retention information is separated into:
+
+- General retention principles
+- Specific retention periods explicitly stated in the policy
+
+This prevents general retention language from being misread as a precise policy for every data category.
+
+### 4. What’s Unclear
+
+PrivacyLens performs a structured clarity audit across multiple categories and highlights:
+
+- Areas where the policy is clear
+- Areas where information is conditional
+- Areas where information is missing or ambiguous
+- Questions that may need clarification
+
+Each open question includes a title, the unresolved question, why it remains open, and a priority level.
+
+### 5. Your Rights & Action
+
+PrivacyLens separates two different sources of rights information:
+
+- Company policy: what the policy itself explicitly describes
+- Jurisdiction: a general reference based on legal context
+
+The current implementation includes India’s Digital Personal Data Protection Act, 2023 and the DPDP Rules.
+
+The app also includes a request generator that can produce an editable privacy-rights request.
+
+### 6. Evidence, Everywhere
+
+PrivacyLens separates interpretation from source text. Every finding distinguishes between:
+
+- PrivacyLens analysis
+- Policy evidence
+
+Each finding includes a confidence level: high, medium, or low.
+
+### 7. Methodology
+
+A dedicated methodology page explains:
+
+- What PrivacyLens analyzes
+- What it does not analyze
+- How analysis is performed
+- Review-priority criteria
+- Evidence-confidence criteria
+- Clarity criteria
+- Jurisdiction handling
+
+### 8. Explain This to Me
+
+Users can click an individual category to receive a short, plain-English explanation powered by Gemini. The explanation is scoped only to the information actually identified in the policy.
+
+### 9. Personalization
+
+Users can choose what matters most to them, such as:
+
+- Location
+- Advertising and profiling
+- Children’s data
+- Financial information
+- Third-party sharing
+- Retention and deletion
+
+PrivacyLens then reorders and highlights the relevant sections based on those preferences.
+
+## Architecture
+
+```text
+User
+  │
+  ├─ Paste policy
+  └─ Provide policy URL
+  │
+  ▼
+Next.js App
+  │
+  └─ Server-side API routes
+       │
+       ├─ Analyze policy
+       ├─ Explain section
+       └─ Draft request
+  │
+  ▼
+Gemini API
+  │
+  ▼
+Structured dossier
+```
+
+The Gemini API is called only from server-side API routes, so the API key is never exposed directly to the browser.
+
+## Tech Stack
+
+- Next.js 14
+- TypeScript
+- Tailwind CSS
+- Google Gemini API
+- Next.js API Routes
+- Vercel
+
+## Project Structure
+
+```text
+app/
+  page.tsx                     # Input → dossier state machine
+  layout.tsx                   # Fonts and metadata
+  methodology/page.tsx         # Methodology page
+  api/
+    analyze/route.ts           # Policy text/URL → structured dossier
+    explain/route.ts           # Plain-language explanation
+    draft-request/route.ts     # Rights-request generation
+
+components/
+  SiteHeader.tsx              # Branding and navigation
+  BackToTop.tsx                # Scroll-to-top button
+  Hero.tsx                     # URL / policy text input
+  Dossier.tsx                  # Main analysis dossier
+  PreferencesPicker.tsx        # Personalization controls
+  EvidenceBlock.tsx            # Analysis + evidence blocks
+  ExplainModal.tsx             # AI explanation popup
+  InfoModal.tsx                # Methodology/jurisdiction information
+  ActionPanel.tsx              # Rights + request generator
+
+lib/
+  gemini.ts                   # Gemini API client + URL fetching
+  types.ts                    # Shared TypeScript types
+  dpdpRights.ts               # India DPDP rights reference
+  methodology.ts              # Analysis methodology
+```
+
+## Local Setup
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/arghya29/privacy-lens.git
+cd privacy-lens
+```
+
+2. Install dependencies
 
 ```bash
 npm install
+```
+
+3. Configure environment variables
+
+```bash
 cp .env.example .env.local
-# edit .env.local and add your GEMINI_API_KEY (from https://aistudio.google.com/apikey)
+```
+
+Then add your Gemini API key:
+
+```env
+GEMINI_API_KEY=your_api_key_here
+```
+
+You can obtain a Gemini API key from https://aistudio.google.com/apikey.
+
+Optionally set:
+
+```env
+GEMINI_MODEL=gemini-3.8-flash
+```
+
+4. Start the development server
+
+```bash
 npm run dev
 ```
 
-Visit http://localhost:3000.
+Then open http://localhost:3000.
 
 ## Deploying to Vercel
 
-1. Push this project to a GitHub repo.
-2. In Vercel, "Add New Project" → import the repo (Next.js is auto-detected).
-3. Under **Settings → Environment Variables**, add:
-   - `GEMINI_API_KEY` — your Gemini API key
-   - `GEMINI_MODEL` — optional, defaults to `gemini-3.8-flash`
-4. Deploy. No other configuration is required.
+1. Push the project to GitHub.
+2. Open Vercel and select Add New Project.
+3. Import the GitHub repository.
+4. Add the environment variables:
+   - `GEMINI_API_KEY`
+   - `GEMINI_MODEL`
+5. Deploy.
 
-Alternatively, from the project folder:
+Alternatively:
 
 ```bash
-npm i -g vercel
+npm install -g vercel
 vercel
 ```
 
-and follow the prompts (it will ask you to set the same environment
-variables).
+## Deliberately Not Built
 
-## Project structure
+PrivacyLens intentionally avoids several features.
 
-```
-app/
-  page.tsx              # input → dossier state machine
-  layout.tsx            # fonts, metadata
-  methodology/page.tsx   # static methodology page
-  api/
-    analyze/route.ts     # policy text/URL → structured JSON dossier
-    explain/route.ts      # plain-language explanation of one item
-    draft-request/route.ts # generates a draft rights-request email
-components/
-  SiteHeader.tsx          # branding, methodology link, "+ New search"
-  BackToTop.tsx           # floating scroll-to-top button
-  Hero.tsx              # URL / paste-text input
-  Dossier.tsx           # continuous-scroll dossier with sticky scroll-spy nav
-  PreferencesPicker.tsx # "what matters to you" chips that jump + reorder
-  EvidenceBlock.tsx      # AI summary + confidence + policy-evidence toggle
-  ExplainModal.tsx       # on-demand AI explanation popup
-  InfoModal.tsx          # static (non-AI) methodology/jurisdiction popups
-  ActionPanel.tsx        # DPDP rights reference + editable draft-request generator
-lib/
-  gemini.ts             # Gemini API client + URL text fetcher
-  types.ts              # shared TypeScript types
-  dpdpRights.ts          # static India DPDP Act rights reference
-  methodology.ts         # static text for review priority, confidence, jurisdiction, clarity
-```
+- Overall privacy score
+- Policy-vs-observed behavior scanning
+- Cross-policy comparison
+- Multi-jurisdiction rights comparison
 
-## Notes and honest limitations
+## Privacy & Data Handling
 
-- URL fetching does a simple server-side HTML fetch + tag-strip. Sites that
-  render their policy via client-side JavaScript, or that block bots, won't
-  work — paste the text instead in that case.
-- The analysis is only as good as the policy text and the model's reading
-  of it. It's a starting point for understanding your options, not a
-  substitute for reading the policy or getting legal advice — the app says
-  this in its footer and in the rights panel on purpose.
-- The DPDP rights reference is a simplified, general summary and will need
-  a review pass against the current Rules before being presented as
-  authoritative in a real submission.
+PrivacyLens does not use a database. Analysis is generated per request and is not stored by the application.
+
+The Gemini API is accessed through server-side API routes so the API key is never exposed to the browser.
+
+## Limitations
+
+- URL analysis relies on a simple server-side HTML fetch and tag stripping, so policies rendered client-side or protected against bots may not work.
+- AI analysis depends on the quality of the provided policy text and the model’s interpretation.
+- The DPDP rights reference is a simplified general reference and should not be treated as legal advice.
+
+## Design Philosophy
+
+Privacy policies should not require a law degree to understand.
+
+PrivacyLens is built around a simple idea:
+
+> Know what they know. Know your options.
+
+The goal is not to tell users whether a company is “good” or “bad” with privacy. The goal is to give users enough structured information, evidence, context, and actionable options to make their own decisions.
+
+## Built By
+
+- Arghyadeep Bag — https://github.com/arghya29
+- Meghna Dutta — https://github.com/meghna-cs
+
+Built at LexHack 2026.
+
+## Hackathon
+
+- LexHack 2026
+
+## License
+
+This project is licensed under the Apache License 2.0.
+
+See the [LICENSE](LICENSE) file for details.
+
