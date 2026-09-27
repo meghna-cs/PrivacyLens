@@ -218,7 +218,7 @@ You can obtain a Gemini API key from https://aistudio.google.com/apikey.
 Optionally set:
 
 ```env
-GEMINI_MODEL=gemini-3.8-flash
+GEMINI_MODEL=gemini-3.5-flash-lite
 ```
 
 4. Start the development server
